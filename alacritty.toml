@@ -1,14 +1,7 @@
-[shell]
-program = "/bin/zsh"
-args = ["-l"]
-
 [window]
 opacity = 0.7
 blur = true
 dynamic_title = true
-padding.x = 5
-padding.y = 5
-decorations = "Buttonless"
 
 [font]
 normal.family = "JetBrainsMono Nerd Font"
