@@ -1,0 +1,19 @@
+[window]
+opacity = 0.7
+blur = true
+dynamic_title = true
+
+[font]
+normal.family = "JetBrainsMono Nerd Font"
+normal.style = "Regular"
+
+bold.family = "JetBrainsMono Nerd Font"
+bold.style = "Bold"
+
+italic.family = "JetBrainsMono Nerd Font"
+italic.style = "Italic"
+
+bold_italic.family = "JetBrainsMono Nerd Font"
+bold_italic.style = "Bold Italic"
+
+size = 18
