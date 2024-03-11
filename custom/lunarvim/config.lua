@@ -223,6 +223,44 @@ lvim.plugins = {
           dap.listeners.before.event_exited["dapui_config"] = function()
             dapui.close({})
           end
+
+          dap.adapters["pwa-node"] = {
+            type = "server",
+            host = "localhost",
+            port = "${port}",
+            executable = {
+              command = "node",
+              -- 💀 Make sure to update this path to point to your installation
+              args = { "${workspaceFolder}/dist/main.js", "${port}" },
+            }
+          }
+
+          dap.configurations.javascript = {
+            {
+              type = "pwa-node",
+              request = "launch",
+              name = "Launch file",
+              program = "${file}",
+              cwd = "${workspaceFolder}",
+            },
+          }
+
+          dap.configurations.typescript = {
+            {
+              type = 'pwa-node',
+              request = 'launch',
+              name = "Launch file",
+              runtimeExecutable = "deno",
+              runtimeArgs = {
+                "run",
+                "--inspect-wait",
+                "--allow-all"
+              },
+              program = "${file}",
+              cwd = "${workspaceFolder}",
+              attachSimplePort = 9229,
+            },
+          }
         end,
       },
 
@@ -288,16 +326,16 @@ lvim.plugins = {
     },
 
     config = function()
-      local Config = require("lazyvim.config")
-      vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
+      -- local Config = require("lazyvim.config")
+      -- vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
-      for name, sign in pairs(Config.icons.dap) do
-        sign = type(sign) == "table" and sign or { sign }
-        vim.fn.sign_define(
-          "Dap" .. name,
-          { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
-        )
-      end
+      -- for name, sign in pairs(Config.icons.dap) do
+      --   sign = type(sign) == "table" and sign or { sign }
+      --   vim.fn.sign_define(
+      --     "Dap" .. name,
+      --     { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
+      --   )
+      -- end
     end,
   },
 }
