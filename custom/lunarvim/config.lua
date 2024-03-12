@@ -223,44 +223,6 @@ lvim.plugins = {
           dap.listeners.before.event_exited["dapui_config"] = function()
             dapui.close({})
           end
-
-          dap.adapters["pwa-node"] = {
-            type = "server",
-            host = "localhost",
-            port = "${port}",
-            executable = {
-              command = "node",
-              -- 💀 Make sure to update this path to point to your installation
-              args = { "${workspaceFolder}/dist/main.js", "${port}" },
-            }
-          }
-
-          dap.configurations.javascript = {
-            {
-              type = "pwa-node",
-              request = "launch",
-              name = "Launch file",
-              program = "${file}",
-              cwd = "${workspaceFolder}",
-            },
-          }
-
-          dap.configurations.typescript = {
-            {
-              type = 'pwa-node',
-              request = 'launch',
-              name = "Launch file",
-              runtimeExecutable = "deno",
-              runtimeArgs = {
-                "run",
-                "--inspect-wait",
-                "--allow-all"
-              },
-              program = "${file}",
-              cwd = "${workspaceFolder}",
-              attachSimplePort = 9229,
-            },
-          }
         end,
       },
 
@@ -302,6 +264,14 @@ lvim.plugins = {
           },
         },
       },
+
+      {
+        "williamboman/mason.nvim",
+        opts = function(_, opts)
+          opts.ensure_installed = opts.ensure_installed or {}
+          table.insert(opts.ensure_installed, "js-debug-adapter")
+        end,
+      },
     },
 
     -- stylua: ignore
@@ -324,18 +294,62 @@ lvim.plugins = {
       { "<leader>dt", function() require("dap").terminate() end,                                            desc = "Terminate" },
       { "<leader>dw", function() require("dap.ui.widgets").hover() end,                                     desc = "Widgets" },
     },
+    -- config = function()
+    -- end,
+    opts = function()
+      local dap = require("dap")
+      if not dap.adapters["pwa-node"] then
+        require("dap").adapters["pwa-node"] = {
+          type = "server",
+          host = "localhost",
+          port = "${port}",
+          executable = {
+            command = "node",
+            -- 💀 Make sure to update this path to point to your installation
+            args = {
+              require("mason-registry").get_package("js-debug-adapter"):get_install_path()
+              .. "/js-debug/src/dapDebugServer.js",
+              "${port}",
+            },
+          },
+        }
+      end
+      for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
+        if not dap.configurations[language] then
+          dap.configurations[language] = {
+            {
+              type = "pwa-node",
+              request = "launch",
+              name = "Launch file",
+              program = "${file}",
+              cwd = "${workspaceFolder}",
+            },
+            {
+              type = "pwa-node",
+              request = "attach",
+              name = "Attach",
+              processId = require("dap.utils").pick_process,
+              cwd = "${workspaceFolder}",
+            },
+          }
+        end
+      end
+    end,
+  },
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = { "kevinhwang91/promise-async" },
+    init = function()
+      vim.o.foldcolumn = "1" -- '0' is not bad
+      vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
 
+      vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+      vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+    end,
     config = function()
-      -- local Config = require("lazyvim.config")
-      -- vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
-
-      -- for name, sign in pairs(Config.icons.dap) do
-      --   sign = type(sign) == "table" and sign or { sign }
-      --   vim.fn.sign_define(
-      --     "Dap" .. name,
-      --     { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
-      --   )
-      -- end
+      require("ufo").setup()
     end,
   },
 }
