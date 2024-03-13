@@ -17,4 +17,9 @@ RUN apk add --no-cache \
   lazygit \
   neovim
 
+USER lunar
+
+WORKDIR /home/lunar/src
+
 COPY ./.config/pip.conf /etc/
+COPY ./.config/.gitconfig /home/lunar
