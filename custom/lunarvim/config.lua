@@ -278,7 +278,7 @@ lvim.plugins = {
     },
 
     -- stylua: ignore
-    keys = {
+    keys         = {
       { "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
       { "<leader>db", function() require("dap").toggle_breakpoint() end,                                    desc = "Toggle Breakpoint" },
       { "<leader>dc", function() require("dap").continue() end,                                             desc = "Continue" },
@@ -297,9 +297,12 @@ lvim.plugins = {
       { "<leader>dt", function() require("dap").terminate() end,                                            desc = "Terminate" },
       { "<leader>dw", function() require("dap.ui.widgets").hover() end,                                     desc = "Widgets" },
     },
-    -- config = function()
+    -- config       = function()
     -- end,
-    opts = function()
+    opts         = function()
+      local vs = require('dap.ext.vscode')
+
+      vs.load_launchjs('${workspaceFolder}/.vscode/launch.json');
       local dap = require("dap")
       if not dap.adapters["pwa-node"] then
         require("dap").adapters["pwa-node"] = {
