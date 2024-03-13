@@ -86,22 +86,22 @@ lvim.plugins = {
       }
     end
   },
-  -- {
-  --   "tzachar/cmp-tabnine",
-  --   build = "./install.sh",
-  --   dependencies = "hrsh7th/nvim-cmp",
-  --   event = "InsertEnter",
-  -- },
+  {
+    "tzachar/cmp-tabnine",
+    build = "./install.sh",
+    dependencies = "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+  },
   {
     "rmagatti/goto-preview",
     config = function()
       require('goto-preview').setup {
-        width = 120,              -- Width of the floating window
-        height = 25,              -- Height of the floating window
-        default_mappings = false, -- Bind default mappings
-        debug = false,            -- Print debug information
-        opacity = nil,            -- 0-100 opacity level of the floating window where 100 is fully transparent.
-        post_open_hook = nil      -- A function taking two arguments, a buffer and a window to be ran as a hook.
+        width = 120,             -- Width of the floating window
+        height = 25,             -- Height of the floating window
+        default_mappings = true, -- Bind default mappings
+        debug = false,           -- Print debug information
+        opacity = nil,           -- 0-100 opacity level of the floating window where 100 is fully transparent.
+        post_open_hook = nil     -- A function taking two arguments, a buffer and a window to be ran as a hook.
         -- You can use "default_mappings = true" setup option
         -- Or explicitly set keybindings
         -- vim.cmd("nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>")
@@ -113,7 +113,10 @@ lvim.plugins = {
   {
     "ray-x/lsp_signature.nvim",
     event = "BufRead",
-    config = function() require "lsp_signature".on_attach() end,
+    config = function(_, opts)
+      require "lsp_signature".on_attach()
+      require "lsp_signature".setup(opts)
+    end,
   },
   {
     "folke/trouble.nvim",
@@ -352,6 +355,16 @@ lvim.plugins = {
       require("ufo").setup()
     end,
   },
+  {
+    "tpope/vim-surround"
+  },
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
+    -- use opts = {} for passing setup options
+    -- this is equalent to setup({}) function
+  }
 }
 
 lvim.builtin.which_key.mappings["t"] = {
@@ -394,4 +407,5 @@ code_actions.setup {
   },
 }
 
-lvim.format_on_save.enabled = true
+lvim.format_on_save.enabled = false
+lvim.builtin.treesitter.rainbow.enable = true
