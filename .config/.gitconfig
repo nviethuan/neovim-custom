@@ -1,5 +1,5 @@
 [safe]
-  directory = /home/lunar/src
+  directory = ~/src
 [init]
   defaultBranch = master
 [http]
