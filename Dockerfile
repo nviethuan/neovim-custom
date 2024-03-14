@@ -15,6 +15,7 @@ RUN apk add --no-cache \
   npm \
   ripgrep \
   lazygit \
-  neovim
+  neovim \
+  unzip
 
 COPY ./.config/pip.conf /etc/
