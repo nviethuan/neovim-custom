@@ -1,22 +1,16 @@
-FROM alpine
+FROM python:alpine
 
 RUN apk update
 RUN apk upgrade
 
-RUN apk add --no-cache \
+RUN apk add --no-cache --update \
   curl \
-  bash \
   sudo \
   git \
   build-base \
-  python3 \
-  py3-pip \
   nodejs \
   npm \
   ripgrep \
   lazygit \
   neovim \
-  unzip \
-  zsh
-
-COPY ./.config/pip.conf /etc/
+  unzip
