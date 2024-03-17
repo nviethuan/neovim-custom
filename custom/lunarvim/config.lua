@@ -272,7 +272,6 @@ lvim.plugins = {
           },
         },
       },
-
       {
         "williamboman/mason.nvim",
         opts = function(_, opts)
@@ -344,7 +343,7 @@ lvim.plugins = {
             env = {
               { NODE_ENV = "debug" }
             },
-            envFile = "${workspaceFolder}/.env"
+            envFile = "${workspaceFolder}/.env",
           }
 
         }
